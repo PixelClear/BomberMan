@@ -1,16 +1,49 @@
-#include "SDL.h"
+#include "Game.h"
+
+using namespace Engine;
+
+class Callbacks : public SDLCallbacks
+{
+    virtual void onKey(int keyCode, bool pressed) override;
+    virtual void onViewportSizeChanged(int w, int h) override;
+    virtual void onRenderFrame(double deltaTime) override;
+    virtual void onUpdateFrame(double elapseTime) override;
+};
+
+
+void Callbacks::onKey(int keyCode, bool pressed)
+{
+
+}
+
+void Callbacks::onViewportSizeChanged(int w, int h)
+{
+
+}
+
+void Callbacks::onRenderFrame(double deltaTime)
+{
+
+}
+
+void Callbacks::onUpdateFrame(double elapseTime)
+{
+
+}
 
 int main(int argc, char* argv[])
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
-    SDL_Window *window = SDL_CreateWindow("BomberMan", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_SHOWN);
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-    
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    SDL_RenderClear(renderer);;
-
-    SDL_RenderPresent(renderer);
-    SDL_Delay(3000);
-
+    try
+    {
+        Callbacks cb ;
+        std::unique_ptr<GameEngine> ge = std::make_unique<GameEngine>(&cb, "BomberMan - Reloaded", 800, 600, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, false);
+      
+        ge->renderMainLoop();
+    }
+    catch (std::exception e)
+    {
+        std::cerr << e.what();
+    }
     return 0;
 }
+
