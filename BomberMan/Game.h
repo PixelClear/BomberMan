@@ -30,25 +30,28 @@ namespace Engine
             SDL_DestroyTexture(texture_);;
         }
 
-        void setDstRect(int w, int h, int x = 0, int y = 0) noexcept
+        void setSrcRect(const SDL_Rect& src)noexcept
         {
-            dst_.w = w;
-            dst_.h = h;
-            dst_.x = x;
-            dst_.y = y;
+            src_.w = src.w;
+            src_.h = src.h;
+            src_.x = src.x;
+            src_.y = src.y;
         }
 
-        void setSrcRect(int w, int h, int x = 0, int y = 0) noexcept
+        void setDstRect(const SDL_Rect& dst)noexcept
         {
-            src_.w = w;
-            src_.h = h;
-            src_.x = x;
-            src_.y = y;
+            dst_.w = dst.w;
+            dst_.h = dst.h;
+            dst_.x = dst.x;
+            dst_.y = dst.y;
         }
+
+        uint32_t getWidth() const noexcept { return width_; }
+        uint32_t getHeight() const noexcept { return height_; }
 
         void RenderTexture(SDL_Renderer* renderer) noexcept
         {
-            SDL_RenderCopy(renderer, texture_, NULL, &dst_);
+            SDL_RenderCopy(renderer, texture_, &src_, &dst_);
         }
 
         //Load asset just accesses renderer so raw pointer is passed
@@ -67,20 +70,27 @@ namespace Engine
                 return false;
             }
 
+            width_ = tmpSurf->w;
+            height_ = tmpSurf->h;
             SDL_FreeSurface(tmpSurf);
+
+            return true;
         }
 
     private:
         SDL_Rect src_;
         SDL_Rect dst_;
+        uint32_t width_;
+        uint32_t height_;
         SDL_Texture* texture_ = nullptr;
     };
 
     class SDLCallbacks
     {
     public:
-        virtual void onKey(int keyCode, bool pressed) = 0;
-        virtual void onViewportSizeChanged(int w, int h) = 0;
+        virtual void onInit(SDL_Renderer* renderer) = 0;
+        virtual void onKey(SDL_Renderer* renderer, int keyCode, bool pressed) = 0;
+        virtual void onViewportSizeChanged(SDL_Renderer* renderer,int w, int h) = 0;
         virtual void onRenderFrame(SDL_Renderer* renderer, double deltaTime) = 0;
         virtual void onUpdateFrame(SDL_Renderer* renderer, double elapseTime) = 0;
     };
@@ -130,6 +140,8 @@ namespace Engine
             }
 
             SDL_SetRenderDrawColor(renderer_, 255, 0, 255, 255);
+
+            cb_->onInit(renderer_); // This will let application load assets 
         }
 
         ~GameEngine()
@@ -144,25 +156,36 @@ namespace Engine
 
         void renderMainLoop() noexcept
         {
+            const double FPS = 60;
+            const double frameDelay = 1000.0 / FPS;
+            double elapsedTime = 0.0;
+
             static auto timeStart_ = std::chrono::time_point_cast<milisec>(std::chrono::high_resolution_clock::now());
-            timeStamp_ = std::chrono::time_point_cast<milisec>(std::chrono::high_resolution_clock::now()); //This is time_point
+           
 
             while (handleEvent())
             {
                 const auto newTimeStamp = std::chrono::time_point_cast<milisec>(std::chrono::high_resolution_clock::now());
-                //Time from start of the game
+                //Time from start of game loop
                 const double deltaTime = std::chrono::duration<double>(newTimeStamp - timeStart_).count(); //time_point.count is long long hence doube cast
-                //Time from last frame
-                const double elapsedTime = std::chrono::duration<double>(newTimeStamp - timeStamp_).count();
-                timeStamp_ = newTimeStamp;
+                
                 
                 SDL_RenderClear(renderer_);
 
-                cb_->onUpdateFrame(renderer_, deltaTime); //temp passing delta time
+                cb_->onUpdateFrame(renderer_, deltaTime); 
                 cb_->onRenderFrame(renderer_, deltaTime);
 
                 SDL_RenderPresent(renderer_);
 
+                //Time to render this frame
+                timeStamp_ = std::chrono::time_point_cast<milisec>(std::chrono::high_resolution_clock::now()); //This is time_point
+                elapsedTime = std::chrono::duration<double>(timeStamp_ - newTimeStamp).count();
+
+                //To control rendering to 60 FPS
+                if (frameDelay > elapsedTime)
+                {
+                    SDL_Delay(static_cast<int>(frameDelay - elapsedTime));
+                }
             }
         }
 
@@ -182,7 +205,7 @@ namespace Engine
             case SDL_KEYDOWN:
             case SDL_KEYUP:
 
-                cb_->onKey(event.key.keysym.sym, event.type == SDL_KEYDOWN);
+                cb_->onKey(renderer_, event.key.keysym.sym, event.type == SDL_KEYDOWN);
                 break;
             case SDL_WINDOWEVENT:
 
@@ -191,7 +214,7 @@ namespace Engine
                     width_ = event.window.data1;
                     height_ = event.window.data2;
 
-                    cb_->onViewportSizeChanged(width_, height_);
+                    cb_->onViewportSizeChanged(renderer_, width_, height_);
                 }
                 break;
             default:
