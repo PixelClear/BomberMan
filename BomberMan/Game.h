@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SDL.h"
+#include "SDL_image.h"
 #include <iostream>
 #include <memory>
 #include <chrono>
@@ -11,13 +12,77 @@
 
 namespace Engine
 {
+
+    class Texture
+    {
+    public:
+
+        //Explicit is only written to cont if you dont want compiler to conver int or other object implicitly to texture type which wont be case so no need to write it
+        //Also explicit is used with parameterized const
+        Texture()
+        {
+            src_.w = src_.h = src_.x = src_.y = 0;
+            dst_.w = dst_.h =  dst_.x = dst_.y = 0;
+        }
+
+        ~Texture()
+        {
+            SDL_DestroyTexture(texture_);;
+        }
+
+        void setDstRect(int w, int h, int x = 0, int y = 0) noexcept
+        {
+            dst_.w = w;
+            dst_.h = h;
+            dst_.x = x;
+            dst_.y = y;
+        }
+
+        void setSrcRect(int w, int h, int x = 0, int y = 0) noexcept
+        {
+            src_.w = w;
+            src_.h = h;
+            src_.x = x;
+            src_.y = y;
+        }
+
+        void RenderTexture(SDL_Renderer* renderer) noexcept
+        {
+            SDL_RenderCopy(renderer, texture_, NULL, &dst_);
+        }
+
+        //Load asset just accesses renderer so raw pointer is passed
+        bool loadTexture(const std::string& fileName, SDL_Renderer* renderer)
+        {
+            SDL_Surface* tmpSurf = IMG_Load(fileName.c_str());
+            if (!tmpSurf)
+            {
+                return false;
+            }
+
+            texture_ = SDL_CreateTextureFromSurface(renderer, tmpSurf);
+            if (!texture_)
+            {
+                SDL_FreeSurface(tmpSurf);
+                return false;
+            }
+
+            SDL_FreeSurface(tmpSurf);
+        }
+
+    private:
+        SDL_Rect src_;
+        SDL_Rect dst_;
+        SDL_Texture* texture_ = nullptr;
+    };
+
     class SDLCallbacks
     {
     public:
         virtual void onKey(int keyCode, bool pressed) = 0;
         virtual void onViewportSizeChanged(int w, int h) = 0;
-        virtual void onRenderFrame(double deltaTime) = 0;
-        virtual void onUpdateFrame(double elapseTime) = 0;
+        virtual void onRenderFrame(SDL_Renderer* renderer, double deltaTime) = 0;
+        virtual void onUpdateFrame(SDL_Renderer* renderer, double elapseTime) = 0;
     };
 
 
@@ -33,6 +98,8 @@ namespace Engine
         using TimeStamp = std::chrono::time_point<Clock, Duration>;
    
     public:
+
+        //I dont want objects to be get default created as I need all this parameters to create window and renderer
         GameEngine() = delete;
 
         GameEngine(SDLCallbacks* cb, std::string title, uint32_t width, uint32_t height, uint32_t xpos = SDL_WINDOWPOS_CENTERED, uint32_t ypos = SDL_WINDOWPOS_CENTERED, bool fullscreen = false):
@@ -73,7 +140,9 @@ namespace Engine
             std::cout << "SDL done...." << std::endl;
         }
 
-        void renderMainLoop()
+        SDL_Renderer* getRenderer() const noexcept{ return renderer_; }
+
+        void renderMainLoop() noexcept
         {
             static auto timeStart_ = std::chrono::time_point_cast<milisec>(std::chrono::high_resolution_clock::now());
             timeStamp_ = std::chrono::time_point_cast<milisec>(std::chrono::high_resolution_clock::now()); //This is time_point
@@ -81,14 +150,16 @@ namespace Engine
             while (handleEvent())
             {
                 const auto newTimeStamp = std::chrono::time_point_cast<milisec>(std::chrono::high_resolution_clock::now());
-                const double deltaTime = std::chrono::duration<double>(timeStart_ - newTimeStamp).count(); //time_point.count is long long hence doube cast
-                const double elapsedTime = std::chrono::duration<double>(timeStamp_ - newTimeStamp).count();
+                //Time from start of the game
+                const double deltaTime = std::chrono::duration<double>(newTimeStamp - timeStart_).count(); //time_point.count is long long hence doube cast
+                //Time from last frame
+                const double elapsedTime = std::chrono::duration<double>(newTimeStamp - timeStamp_).count();
                 timeStamp_ = newTimeStamp;
                 
                 SDL_RenderClear(renderer_);
 
-                cb_->onUpdateFrame(elapsedTime);
-                cb_->onRenderFrame(deltaTime);
+                cb_->onUpdateFrame(renderer_, deltaTime); //temp passing delta time
+                cb_->onRenderFrame(renderer_, deltaTime);
 
                 SDL_RenderPresent(renderer_);
 
@@ -97,7 +168,7 @@ namespace Engine
 
     private:
 
-        bool handleEvent()
+        bool handleEvent() noexcept
         {
             SDL_Event event;
 

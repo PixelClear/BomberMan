@@ -1,2 +1,4 @@
 ﻿  main.cpp
+g:\personalprojects\bomberman\bomberman\main.cpp(35): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+g:\personalprojects\bomberman\bomberman\game.h(71): warning C4715: 'Engine::Texture::loadTexture': not all control paths return a value
   BomberMan.vcxproj -> G:\PersonalProjects\BomberMan\x64\Debug\BomberMan.exe
