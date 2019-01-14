@@ -12,70 +12,66 @@
 
 namespace Engine
 {
+    class GameObject
+    {
+    public:
+        virtual void update(SDL_Renderer* renderer, const SDL_Rect& src, const SDL_Rect& dst) = 0;
+        virtual void render(SDL_Renderer* renderer) = 0;
+    };
 
-    class Texture
+    class Sprite : public GameObject
     {
     public:
 
-        //Explicit is only written to cont if you dont want compiler to conver int or other object implicitly to texture type which wont be case so no need to write it
-        //Also explicit is used with parameterized const
-        Texture()
-        {
-            src_.w = src_.h = src_.x = src_.y = 0;
-            dst_.w = dst_.h =  dst_.x = dst_.y = 0;
-        }
-
-        ~Texture()
-        {
-            SDL_DestroyTexture(texture_);;
-        }
-
-        void setSrcRect(const SDL_Rect& src)noexcept
-        {
-            src_.w = src.w;
-            src_.h = src.h;
-            src_.x = src.x;
-            src_.y = src.y;
-        }
-
-        void setDstRect(const SDL_Rect& dst)noexcept
-        {
-            dst_.w = dst.w;
-            dst_.h = dst.h;
-            dst_.x = dst.x;
-            dst_.y = dst.y;
-        }
-
-        uint32_t getWidth() const noexcept { return width_; }
-        uint32_t getHeight() const noexcept { return height_; }
-
-        void RenderTexture(SDL_Renderer* renderer) noexcept
-        {
-            SDL_RenderCopy(renderer, texture_, &src_, &dst_);
-        }
-
-        //Load asset just accesses renderer so raw pointer is passed
-        bool loadTexture(const std::string& fileName, SDL_Renderer* renderer)
+        Sprite() = delete;
+       
+        explicit Sprite(SDL_Renderer* renderer, const std::string& fileName)
         {
             SDL_Surface* tmpSurf = IMG_Load(fileName.c_str());
             if (!tmpSurf)
             {
-                return false;
+                throw std::runtime_error("Failed to create surface!!");
             }
 
             texture_ = SDL_CreateTextureFromSurface(renderer, tmpSurf);
             if (!texture_)
             {
                 SDL_FreeSurface(tmpSurf);
-                return false;
+                throw std::runtime_error("Failed to create texture!!");
             }
 
             width_ = tmpSurf->w;
             height_ = tmpSurf->h;
             SDL_FreeSurface(tmpSurf);
-
-            return true;
         }
+
+        ~Sprite()
+        {
+            SDL_DestroyTexture(texture_);;
+        }
+
+        virtual void update(SDL_Renderer* renderer, const SDL_Rect& src, const SDL_Rect& dst) override
+        {
+            src_.w = getWidth();
+            src_.h = getHeight();
+            src_.x = src.x;
+            src_.y = src.y;
+
+            dst_.w = dst.w;
+            dst_.h = dst.h;
+            dst_.x = dst.x;
+            dst_.y = dst.y;
+        }
+
+        virtual void render(SDL_Renderer* renderer) override
+        {
+            SDL_RenderCopy(renderer, texture_, &src_, &dst_);
+        }
+
+    private:
+        
+        uint32_t getWidth() const noexcept { return width_; }
+        uint32_t getHeight() const noexcept { return height_; }
 
     private:
         SDL_Rect src_;
@@ -84,6 +80,8 @@ namespace Engine
         uint32_t height_;
         SDL_Texture* texture_ = nullptr;
     };
+
+    
 
     class SDLCallbacks
     {

@@ -3,7 +3,7 @@
 using namespace Engine;
 
 
-
+GameObject* bird;
 
 class Callbacks : public SDLCallbacks
 {
@@ -13,14 +13,12 @@ public:
     virtual void onViewportSizeChanged(SDL_Renderer* renderer,int w, int h) override;
     virtual void onRenderFrame(SDL_Renderer* renderer, double deltaTime) override;
     virtual void onUpdateFrame(SDL_Renderer* renderer, double elapseTime) override;
-
-    Texture texture_;
 };
 
 
 void Callbacks::onInit(SDL_Renderer* renderer)
 {
-    texture_.loadTexture("../Assets/FlappyBird.png", renderer);
+    bird = new Sprite(renderer, "../Assets/FlappyBird.png");
 }
 
 void Callbacks::onKey(SDL_Renderer*, int keyCode, bool pressed)
@@ -35,7 +33,7 @@ void Callbacks::onViewportSizeChanged(SDL_Renderer*, int w, int h)
 
 void Callbacks::onRenderFrame(SDL_Renderer* renderer, double deltaTime)
 {
-    texture_.RenderTexture(renderer);
+    bird->render(renderer);
 }
 
 void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
@@ -44,8 +42,8 @@ void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
     time += elapseTime;
 
     SDL_Rect src;
-    src.w = texture_.getWidth();
-    src.h = texture_.getHeight();
+    src.w = 0;
+    src.h = 0;
     src.x = 0;
     src.y = 0;
 
@@ -55,8 +53,7 @@ void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
     dst.x = time;
     dst.y = 0;
 
-    texture_.setSrcRect(src);
-    texture_.setDstRect(dst);
+    bird->update(renderer, src, dst);
 }
 
 int main(int argc, char* argv[])
