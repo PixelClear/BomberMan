@@ -22,8 +22,8 @@ Engine::Sprite::Sprite(SDL_Renderer * renderer, const std::string & fileName)
 
 void Engine::Sprite::update(SDL_Renderer * renderer, const SDL_Rect & src, const SDL_Rect & dst)
 {
-    src_.w = getWidth();
-    src_.h = getHeight();
+    src_.w = src.w;
+    src_.h = src.h;
     src_.x = src.x;
     src_.y = src.y;
 

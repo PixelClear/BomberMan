@@ -3,7 +3,18 @@
 using namespace Engine;
 
 
-GameObject* bird;
+TileMap* gMap;
+
+uint32_t map[10][10] = { {0, 0, GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, 0, 0, 0},
+                            {0, 0, GamObjectType::BrickWall, 0, 0, 0, GamObjectType::BrickWall, 0, 0, GamObjectType::WaterBlock},
+                            {0, 0, 0, 0, 0, 0, GamObjectType::BrickWall, 0, 0, GamObjectType::WaterBlock},
+                            {0, 0, 0, 0, 0, 0, GamObjectType::BrickWall, 0, 0, 0},
+                            {0, GamObjectType::GrassBlock, GamObjectType::GrassBlock, 0, 0, 0, 0, 0, GamObjectType::WaterBlock, GamObjectType::WaterBlock},
+                            {0, GamObjectType::GrassBlock, 0, 0, 0, 0, 0, 0, 0, GamObjectType::WaterBlock},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {GamObjectType::BrickWall, GamObjectType::WaterBlock, 0, 0, 0, 0, 0,0, 0, 0},
+                            {GamObjectType::WaterBlock, 0, 0, GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, GamObjectType::GrassBlock, GamObjectType::GrassBlock} };
 
 class Callbacks : public SDLCallbacks
 {
@@ -18,7 +29,8 @@ public:
 
 void Callbacks::onInit(SDL_Renderer* renderer)
 {
-    bird = new Sprite(renderer, "../Assets/FlappyBird.png");
+    gMap = new TileMap(renderer, 10, 15, 64, 64);
+    gMap->loadMap(&map[0][0]);
 }
 
 void Callbacks::onKey(SDL_Renderer*, int keyCode, bool pressed)
@@ -33,27 +45,11 @@ void Callbacks::onViewportSizeChanged(SDL_Renderer*, int w, int h)
 
 void Callbacks::onRenderFrame(SDL_Renderer* renderer, double deltaTime)
 {
-    bird->render(renderer);
+    gMap->render();
 }
 
 void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
 {
-    static double time = 0;
-    time += elapseTime;
-
-    SDL_Rect src;
-    src.w = 0;
-    src.h = 0;
-    src.x = 0;
-    src.y = 0;
-
-    SDL_Rect dst;
-    dst.w = 64;
-    dst.h = 64;
-    dst.x = time;
-    dst.y = 0;
-
-    bird->update(renderer, src, dst);
 }
 
 int main(int argc, char* argv[])
@@ -61,8 +57,8 @@ int main(int argc, char* argv[])
     try
     {
         Callbacks cb ;
-        
-        std::unique_ptr<GameEngine> ge = std::make_unique<GameEngine>(&cb, "BomberMan - Reloaded", 800, 600, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, false);
+
+        std::unique_ptr<GameEngine> ge = std::make_unique<GameEngine>(&cb, "BomberMan - Reloaded", 640, 640, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, false);
         
         ge->renderMainLoop();
     }

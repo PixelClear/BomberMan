@@ -1,6 +1,2 @@
-﻿  Game.cpp
-  GameObject.cpp
-  main.cpp
-g:\personalprojects\bomberman\bomberman\main.cpp(53): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-  Generating Code...
+﻿  main.cpp
   BomberMan.vcxproj -> G:\PersonalProjects\BomberMan\x64\Debug\BomberMan.exe

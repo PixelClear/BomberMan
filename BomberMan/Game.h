@@ -2,6 +2,7 @@
 
 #include "SDLCallbacks.h"
 #include "GameObject.h"
+#include "TileMap.h"
 #include <iostream>
 #include <memory>
 #include <chrono>

@@ -21,7 +21,7 @@ namespace Engine
 
         ~Sprite()
         {
-            SDL_DestroyTexture(texture_);;
+            SDL_DestroyTexture(texture_);
         }
 
         virtual void update(SDL_Renderer* renderer, const SDL_Rect& src, const SDL_Rect& dst) override;
