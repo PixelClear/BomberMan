@@ -27,7 +27,7 @@ Engine::GameEngine::GameEngine(SDLCallbacks * cb, std::string title, uint32_t wi
         throw std::runtime_error("SDL_CreateRenderer() failed to create renderer!!");
     }
 
-    SDL_SetRenderDrawColor(renderer_, 255, 0, 255, 255);
+    SDL_SetRenderDrawColor(renderer_, 200, 200, 230, 255);
 
     cb_->onInit(renderer_); // This will let application load assets 
 }
