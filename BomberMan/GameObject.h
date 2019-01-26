@@ -28,6 +28,10 @@ namespace Engine
 
         virtual void render(SDL_Renderer* renderer) override;
 
+        void setSrcRect(const SDL_Rect& src) { src_ = src; }
+
+        void setDstRect(const SDL_Rect& dst) { dst_ = dst; }
+
     private:
 
         uint32_t getWidth() const noexcept { return width_; }

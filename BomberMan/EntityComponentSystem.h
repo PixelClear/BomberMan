@@ -37,7 +37,10 @@ namespace Engine
     class Component
     {
     public:
+        Component()
+        {
 
+        }
         Entity* entity_; //owner of the component this just refers to parent so no smart pointer needed
 
         virtual void init() = 0;
@@ -52,6 +55,11 @@ namespace Engine
     class Entity
     {
     public:
+        Entity()
+        {
+
+        }
+
         void update()
         {
             for (auto& c : components_)
@@ -74,7 +82,7 @@ namespace Engine
         }
 
         template<typename T, typename... TArgs>
-        T& addComponent(TArgs&&... mArgs);;
+        T& addComponent(TArgs&&... mArgs);
 
         template<typename T>
         T& getComponent() const;

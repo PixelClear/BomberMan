@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SDLCallbacks.h"
-#include "GameObject.h"
+#include "Components.h"
 #include "TileMap.h"
 #include <iostream>
 #include <memory>

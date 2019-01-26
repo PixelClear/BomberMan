@@ -4,6 +4,9 @@ using namespace Engine;
 
 
 TileMap* gMap;
+EntityComponentManager manager;
+
+Entity& player(manager.addEntity());
 
 uint32_t map[10][10] = { {0, 0, GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, 0, 0, 0},
                             {0, 0, GamObjectType::BrickWall, 0, 0, 0, GamObjectType::BrickWall, 0, 0, GamObjectType::WaterBlock},
@@ -31,6 +34,9 @@ void Callbacks::onInit(SDL_Renderer* renderer)
 {
     gMap = new TileMap(renderer, 10, 15, 64, 64);
     gMap->loadMap(&map[0][0]);
+
+    //player.addComponent<PositionComponent>();
+    //player.addComponent<SpriteComponent>(renderer, "../Assets/FlappyBird.png");
 }
 
 void Callbacks::onKey(SDL_Renderer*, int keyCode, bool pressed)
@@ -46,10 +52,13 @@ void Callbacks::onViewportSizeChanged(SDL_Renderer*, int w, int h)
 void Callbacks::onRenderFrame(SDL_Renderer* renderer, double deltaTime)
 {
     gMap->render();
+    manager.render();
 }
 
 void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
 {
+    manager.refresh();
+    manager.update();
 }
 
 int main(int argc, char* argv[])
