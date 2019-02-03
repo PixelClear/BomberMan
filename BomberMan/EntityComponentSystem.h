@@ -82,10 +82,27 @@ namespace Engine
         }
 
         template<typename T, typename... TArgs>
-        T& addComponent(TArgs&&... mArgs);
+        T& addComponent(TArgs&&... mArgs)
+        {
+            T* c(new T(std::forward<TArgs>(mArgs)...));
+            c->entity_ = this;
+            std::unique_ptr<Component> ptr{ c };
+            components_.emplace_back(std::move(ptr));
+
+            componentArray_[getComponentTypeId<T>()] = c;
+            componentBitSet_[getComponentTypeId<T>()] = true;
+
+            c->init();
+
+            return *c;
+        }
 
         template<typename T>
-        T& getComponent() const;
+        T& getComponent() const
+        {
+            auto ptr(componentArray_[getComponentTypeId<T>()]);
+            return *static_cast<T*>(ptr);
+        }
 
     private:
         bool active_ = true;
@@ -107,7 +124,7 @@ namespace Engine
         void render()
         {
             for (auto& e : entities_)
-                e->update();
+                e->render();
         }
 
         void refresh();

@@ -35,8 +35,8 @@ void Callbacks::onInit(SDL_Renderer* renderer)
     gMap = new TileMap(renderer, 10, 15, 64, 64);
     gMap->loadMap(&map[0][0]);
 
-    //player.addComponent<PositionComponent>();
-    //player.addComponent<SpriteComponent>(renderer, "../Assets/FlappyBird.png");
+    player.addComponent<PositionComponent>();
+    player.addComponent<SpriteComponent>(renderer, "../Assets/BrickWall.png");
 }
 
 void Callbacks::onKey(SDL_Renderer*, int keyCode, bool pressed)
@@ -51,7 +51,7 @@ void Callbacks::onViewportSizeChanged(SDL_Renderer*, int w, int h)
 
 void Callbacks::onRenderFrame(SDL_Renderer* renderer, double deltaTime)
 {
-    gMap->render();
+    //gMap->render();
     manager.render();
 }
 

@@ -9,7 +9,7 @@ namespace Engine
 
         PositionComponent()
         {
-
+            x_ = y_ = 0;
         }
 
         PositionComponent(int x, int y) :x_(x), y_(y)
@@ -25,7 +25,6 @@ namespace Engine
         void update() override
         {
             x_++;
-            y_++;
         }
 
         void render() override

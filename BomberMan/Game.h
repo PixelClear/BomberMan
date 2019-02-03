@@ -3,6 +3,7 @@
 #include "SDLCallbacks.h"
 #include "Components.h"
 #include "TileMap.h"
+#include "EntityComponentSystem.h"
 #include <iostream>
 #include <memory>
 #include <chrono>
