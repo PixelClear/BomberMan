@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <bitset>
 #include <array>
+#include "Vector2D.h"
 
 namespace Engine
 {

@@ -44,13 +44,13 @@ namespace Engine
             dst_.x = dst_.y = 0;
             dst_.w = width_; dst_.h = height_;
 
-            positionComponent_ = &entity_->getComponent<PositionComponent>();
+            positionComponent_ = &entity_->getComponent<TransformationComponent>();
         }
 
         void update() override
         {
-            dst_.x = positionComponent_->x();
-            dst_.y = positionComponent_->y();
+            dst_.x = static_cast<int>(positionComponent_->position().x_);
+            dst_.y = static_cast<int>(positionComponent_->position().y_);
 
         }
 
@@ -71,6 +71,6 @@ namespace Engine
         int height_;
         SDL_Texture* texture_ = nullptr;
         SDL_Renderer* renderer_ = nullptr;
-        PositionComponent *positionComponent_;
+		TransformationComponent *positionComponent_;
     };
 }

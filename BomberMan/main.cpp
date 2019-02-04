@@ -35,7 +35,7 @@ void Callbacks::onInit(SDL_Renderer* renderer)
     gMap = new TileMap(renderer, 10, 15, 64, 64);
     gMap->loadMap(&map[0][0]);
 
-    player.addComponent<PositionComponent>();
+    player.addComponent<TransformationComponent>();
     player.addComponent<SpriteComponent>(renderer, "../Assets/BrickWall.png");
 }
 
