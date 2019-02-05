@@ -139,6 +139,7 @@
     <ClInclude Include="EntityComponentSystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="InputControllerComponent.h" />
     <ClInclude Include="TransformationComponent.h" />
     <ClInclude Include="SDLCallbacks.h" />
     <ClInclude Include="SpriteComponent.h" />

@@ -13,7 +13,7 @@ namespace Engine
 			position_.y_ = 0.0f;
         }
 
-		TransformationComponent(const Vector2D& position) :position_(position)
+		TransformationComponent(const Vector2D& position, const Vector2D& velocity, int speed) :position_(position), velocity_(velocity),speed_(speed)
         {
 
         }
@@ -26,12 +26,13 @@ namespace Engine
 
         void init() override
         {
-
+            velocity_.x_ = velocity_.y_ = 0.0f;
         }
 
         void update() override
         {
-			position_.x_++;
+			position_.x_ += velocity_.x_ * speed_;
+            position_.y_ += velocity_.y_ * speed_;
         }
 
         void render() override
@@ -42,9 +43,13 @@ namespace Engine
 
 		Vector2D& position() { return position_; }
 		Vector2D position() const { return position_; }
+        Vector2D& velocity() { return velocity_; }
+        Vector2D velocity() const { return velocity_; }
 
 	private:
 
 		Vector2D position_; //Translation Component
+        Vector2D velocity_;
+        int speed_ = 3;
     };
 }

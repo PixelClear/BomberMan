@@ -69,11 +69,9 @@ void Engine::GameEngine::renderMainLoop() noexcept
 
 bool Engine::GameEngine::handleEvent() noexcept
 {
-    SDL_Event event;
+    SDL_PollEvent(&event_);
 
-    SDL_PollEvent(&event);
-
-    switch (event.type)
+    switch (event_.type)
     {
     case SDL_QUIT:
         return false;
@@ -81,14 +79,14 @@ bool Engine::GameEngine::handleEvent() noexcept
     case SDL_KEYDOWN:
     case SDL_KEYUP:
 
-        cb_->onKey(renderer_, event.key.keysym.sym, event.type == SDL_KEYDOWN);
+        cb_->onKey(renderer_, event_.key.keysym.sym, event_.type == SDL_KEYDOWN);
         break;
     case SDL_WINDOWEVENT:
 
-        if (event.window.type == SDL_WINDOWEVENT_SIZE_CHANGED)
+        if (event_.window.type == SDL_WINDOWEVENT_SIZE_CHANGED)
         {
-            width_ = event.window.data1;
-            height_ = event.window.data2;
+            width_ = event_.window.data1;
+            height_ = event_.window.data2;
 
             cb_->onViewportSizeChanged(renderer_, width_, height_);
         }

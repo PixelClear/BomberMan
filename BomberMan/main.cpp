@@ -37,6 +37,7 @@ void Callbacks::onInit(SDL_Renderer* renderer)
 
     player.addComponent<TransformationComponent>();
     player.addComponent<SpriteComponent>(renderer, "../Assets/BrickWall.png");
+    player.addComponent<InputControllerComponent>();
 }
 
 void Callbacks::onKey(SDL_Renderer*, int keyCode, bool pressed)

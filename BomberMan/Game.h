@@ -42,6 +42,8 @@ namespace Engine
 
         SDL_Renderer* getRenderer() const noexcept{ return renderer_; }
 
+        static SDL_Event getEvent() noexcept { return event_; }
+        
         void renderMainLoop() noexcept;
 
     private:
@@ -56,6 +58,9 @@ namespace Engine
         uint32_t height_ = 400;
         bool fullscreen_ = false;
         TimeStamp<std::chrono::high_resolution_clock, milisec> timeStamp_;
-
+    public:
+        static SDL_Event event_;
     };
+
+    SDL_Event GameEngine::event_;
 }
