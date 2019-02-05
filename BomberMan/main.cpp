@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "Components.h"
+#include "TileMap.h"
 
 using namespace Engine;
 

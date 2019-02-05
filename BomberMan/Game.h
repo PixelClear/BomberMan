@@ -1,9 +1,6 @@
 #pragma once
 
 #include "SDLCallbacks.h"
-#include "Components.h"
-#include "TileMap.h"
-#include "EntityComponentSystem.h"
 #include <iostream>
 #include <memory>
 #include <chrono>
@@ -28,7 +25,7 @@ namespace Engine
     public:
 
         //I dont want objects to be get default created as I need all this parameters to create window and renderer
-        GameEngine() = delete;
+        GameEngine() = default;
 
         GameEngine(SDLCallbacks* cb, std::string title, uint32_t width, uint32_t height, uint32_t xpos = SDL_WINDOWPOS_CENTERED, uint32_t ypos = SDL_WINDOWPOS_CENTERED, bool fullscreen = false);
 
@@ -58,9 +55,6 @@ namespace Engine
         uint32_t height_ = 400;
         bool fullscreen_ = false;
         TimeStamp<std::chrono::high_resolution_clock, milisec> timeStamp_;
-    public:
         static SDL_Event event_;
     };
-
-    SDL_Event GameEngine::event_;
 }

@@ -1,9 +1,7 @@
 #pragma once
 #include "EntityComponentSystem.h"
 #include "Components.h"
-#include "Game.h"
 
-using namespace Engine;
 namespace Engine
 {
     class InputControllerComponent : public Component
@@ -19,9 +17,9 @@ namespace Engine
 
         void update() override
         {
-            if (Engine::GameEngine::event_.type == SDL_KEYDOWN)
+            if (GameEngine::getEvent().type == SDL_KEYDOWN)
             {
-                switch (Engine::GameEngine::event_.key.keysym.sym)
+                switch (GameEngine::getEvent().key.keysym.sym)
                 {
                 case SDLK_w:
                     transformation_->velocity().y_ = -1.0f;
@@ -40,9 +38,9 @@ namespace Engine
                 }
             }
 
-            if (Engine::GameEngine::event_.type == SDL_KEYUP)
+            if (GameEngine::getEvent().type == SDL_KEYUP)
             {
-                switch (Engine::GameEngine::event_.key.keysym.sym)
+                switch (GameEngine::getEvent().key.keysym.sym)
                 {
                 case SDLK_w:
                     transformation_->velocity().y_ = 0.0f;
