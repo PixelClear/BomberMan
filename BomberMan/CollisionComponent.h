@@ -27,7 +27,6 @@ namespace Engine
         std::string tag_;
         TransformationComponent* transform_;
         SpriteComponent* sprite_;
-        int height_;
-        int width_;
+        
     };
 }

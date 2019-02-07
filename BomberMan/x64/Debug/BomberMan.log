@@ -1,7 +1,6 @@
 ﻿  CollisionComponent.cpp
-  EntityComponentSystem.cpp
   InputControllerComponent.cpp
-  main.cpp
   SpriteComponent.cpp
+  main.cpp
   Generating Code...
   BomberMan.vcxproj -> G:\PersonalProjects\BomberMan\x64\Debug\BomberMan.exe

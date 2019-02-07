@@ -50,6 +50,9 @@ namespace Engine
 
 		Vector2D position_; //Translation Component
         Vector2D velocity_;
-        int speed_ = 3;
+        uint32_t speed_ = 3;
+        uint32_t height_ = 32;
+        uint32_t width_ = 32;
+        uint32_t scale = 1;
     };
 }

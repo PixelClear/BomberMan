@@ -17,7 +17,7 @@ namespace Engine
 
         Sprite() = delete;
 
-        explicit Sprite(SDL_Renderer* renderer, const std::string& fileName);
+        explicit Sprite(SDL_Renderer* renderer, const char* fileName);
 
         ~Sprite()
         {
@@ -28,14 +28,16 @@ namespace Engine
 
         virtual void render(SDL_Renderer* renderer) override;
 
+        SDL_Rect& getSrcRect() { return src_; }
+
+        SDL_Rect& getDstRect() { return dst_; }
+
         void setSrcRect(const SDL_Rect& src) { src_ = src; }
 
         void setDstRect(const SDL_Rect& dst) { dst_ = dst; }
 
-    private:
-
-        uint32_t getWidth() const noexcept { return width_; }
-        uint32_t getHeight() const noexcept { return height_; }
+        uint32_t getWidth() const { return width_; }
+        uint32_t getHeight() const { return height_; }
 
     private:
         SDL_Rect src_;

@@ -8,9 +8,9 @@
 #include <exception>
 #include <strstream>
 
-Engine::Sprite::Sprite(SDL_Renderer * renderer, const std::string & fileName)
+Engine::Sprite::Sprite(SDL_Renderer * renderer, const char* fileName)
 {
-    SDL_Surface* tmpSurf = IMG_Load(fileName.c_str());
+    SDL_Surface* tmpSurf = IMG_Load(fileName);
     if (!tmpSurf)
     {
         throw std::runtime_error("Failed to create surface!!");
