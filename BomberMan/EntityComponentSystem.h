@@ -79,7 +79,7 @@ namespace Engine
 
         template<typename T> bool hasComponent() const
         {
-            componentBitSet_[getComponentTypeId<T>()];
+            return componentBitSet_[getComponentTypeId<T>()];
         }
 
         template<typename T, typename... TArgs>

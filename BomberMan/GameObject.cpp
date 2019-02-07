@@ -1,4 +1,12 @@
 #include "GameObject.h"
+#include <SDL_image.h>
+#include <iostream>
+#include <memory>
+#include <chrono>
+#include <atomic>
+#include <string>
+#include <exception>
+#include <strstream>
 
 Engine::Sprite::Sprite(SDL_Renderer * renderer, const std::string & fileName)
 {

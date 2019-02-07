@@ -1,13 +1,8 @@
 #pragma once
 
 #include "SDLCallbacks.h"
-#include <iostream>
-#include <memory>
 #include <chrono>
-#include <atomic>
 #include <string>
-#include <exception>
-#include <strstream>
 
 namespace Engine
 {
@@ -25,7 +20,7 @@ namespace Engine
     public:
 
         //I dont want objects to be get default created as I need all this parameters to create window and renderer
-        GameEngine() = default;
+        GameEngine() = delete;
 
         GameEngine(SDLCallbacks* cb, std::string title, uint32_t width, uint32_t height, uint32_t xpos = SDL_WINDOWPOS_CENTERED, uint32_t ypos = SDL_WINDOWPOS_CENTERED, bool fullscreen = false);
 
@@ -34,7 +29,6 @@ namespace Engine
             SDL_DestroyWindow(window_);
             SDL_DestroyRenderer(renderer_);
             SDL_Quit();
-            std::cout << "SDL done...." << std::endl;
         }
 
         SDL_Renderer* getRenderer() const noexcept{ return renderer_; }

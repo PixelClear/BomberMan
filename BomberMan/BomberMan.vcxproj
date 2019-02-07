@@ -127,14 +127,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="EntityComponentSystem.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="InputControllerComponent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Components.h" />
     <ClInclude Include="EntityComponentSystem.h" />
     <ClInclude Include="Game.h" />
