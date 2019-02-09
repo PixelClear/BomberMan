@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Components.h"
 #include "TileMap.h"
+#include "Collission.h"
 
 using namespace Engine;
 
@@ -9,6 +10,7 @@ TileMap* gMap;
 EntityComponentManager manager;
 
 Entity& player(manager.addEntity());
+Entity& enemey(manager.addEntity());
 
 uint32_t map[10][10] = { {0, 0, GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, 0, 0, 0},
                             {0, 0, GamObjectType::BrickWall, 0, 0, 0, GamObjectType::BrickWall, 0, 0, GamObjectType::WaterBlock},
@@ -37,9 +39,14 @@ void Callbacks::onInit(SDL_Renderer* renderer)
     gMap = new TileMap(renderer, 10, 15, 64, 64);
     gMap->loadMap(&map[0][0]);
 
-    player.addComponent<TransformationComponent>();
+    player.addComponent<TransformationComponent>(0, 0, 64, 64, 1);
     player.addComponent<SpriteComponent>(renderer, "../Assets/BrickWall.png");
     player.addComponent<InputControllerComponent>();
+    player.addComponent<CollisionComponent>("Player");
+
+    enemey.addComponent<TransformationComponent>(300.0f, 30.0f, 30, 300 ,1);
+    enemey.addComponent<SpriteComponent>(renderer, "../Assets/Grass.png");
+    enemey.addComponent<CollisionComponent>("Enemy");
 }
 
 void Callbacks::onKey(SDL_Renderer*, int keyCode, bool pressed)
@@ -62,6 +69,14 @@ void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
 {
     manager.refresh();
     manager.update();
+
+    if (Collission::AABB(player.getComponent<CollisionComponent>().getAABB(),
+        enemey.getComponent<CollisionComponent>().getAABB()))
+    {
+        player.getComponent<TransformationComponent>().position().x_ = 0;
+        player.getComponent<TransformationComponent>().position().y_ = 0;
+    }
+       
 }
 
 int main(int argc, char* argv[])

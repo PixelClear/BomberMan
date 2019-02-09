@@ -37,7 +37,9 @@ namespace Engine
         void setDstRect(const SDL_Rect& dst) { dst_ = dst; }
 
         uint32_t getWidth() const { return width_; }
+        uint32_t& getWidth() { return width_; }
         uint32_t getHeight() const { return height_; }
+        uint32_t& getHeight() { return height_; }
 
     private:
         SDL_Rect src_;

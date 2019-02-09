@@ -12,7 +12,7 @@ namespace Engine
     public:
 
         CollisionComponent() = default;
-      
+        CollisionComponent(const std::string & t) :tag_(t) {}
 
         void init() override;
 
@@ -20,7 +20,9 @@ namespace Engine
 
         void render() override;
 
-     
+        SDL_Rect& getAABB() { return aabb_; }
+        SDL_Rect getAABB() const { return aabb_; }
+
     private:
 
         SDL_Rect aabb_;

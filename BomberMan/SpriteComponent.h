@@ -24,8 +24,9 @@ namespace Engine
         }
 
         void setSrcRect(const SDL_Rect& src) { sprite_->setSrcRect(src); }
-
         void setDstRect(const SDL_Rect& dst) { sprite_->setDstRect(dst); }
+        SDL_Rect& getSrcRect() { return sprite_->getSrcRect(); }
+        SDL_Rect& getDstRect() { return sprite_->getDstRect(); }
 
 
     private:
