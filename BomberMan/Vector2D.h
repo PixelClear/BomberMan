@@ -31,6 +31,8 @@ namespace Engine
 		Vector2D& operator/=(const Vector2D& v1);
 		Vector2D& operator-=(const Vector2D& v1);
 
+        Vector2D& operator*(const int& i);
+
 		float x_;
 		float y_;
 

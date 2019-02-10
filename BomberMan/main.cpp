@@ -73,8 +73,7 @@ void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
     if (Collission::AABB(player.getComponent<CollisionComponent>().getAABB(),
         enemey.getComponent<CollisionComponent>().getAABB()))
     {
-        player.getComponent<TransformationComponent>().position().x_ = 0;
-        player.getComponent<TransformationComponent>().position().y_ = 0;
+        player.getComponent<TransformationComponent>().velocity() * -1;
     }
        
 }

@@ -42,3 +42,10 @@ Vector2D& Engine::Vector2D::operator-=(const Vector2D& v1)
 {
 	return this->subtract(v1);
 }
+
+Vector2D & Engine::Vector2D::operator*(const int & i)
+{
+    this->x_ *= i;
+    this->y_ *= i;
+    return *this;
+}

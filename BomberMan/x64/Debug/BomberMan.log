@@ -1,4 +1,9 @@
-﻿  main.cpp
+﻿  CollisionComponent.cpp
+  EntityComponentSystem.cpp
+  InputControllerComponent.cpp
+  SpriteComponent.cpp
+  Vector2D.cpp
+  main.cpp
 g:\personalprojects\bomberman\bomberman\entitycomponentsystem.h(88): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
@@ -9,4 +14,5 @@ g:\personalprojects\bomberman\bomberman\entitycomponentsystem.h(88): warning C42
           [
               T=Engine::TransformationComponent
           ]
+  Generating Code...
   BomberMan.vcxproj -> G:\PersonalProjects\BomberMan\x64\Debug\BomberMan.exe
