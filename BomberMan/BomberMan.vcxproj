@@ -135,6 +135,7 @@
     <ClCompile Include="InputControllerComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="TileComponent.cpp" />
     <ClCompile Include="TileMap.cpp" />
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="InputControllerComponent.h" />
+    <ClInclude Include="TileComponent.h" />
     <ClInclude Include="TransformationComponent.h" />
     <ClInclude Include="SDLCallbacks.h" />
     <ClInclude Include="SpriteComponent.h" />

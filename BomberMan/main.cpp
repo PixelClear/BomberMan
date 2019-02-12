@@ -5,23 +5,27 @@
 
 using namespace Engine;
 
+constexpr uint32_t mapWidth = 10;
+constexpr uint32_t mapHeight = 10;
 
-TileMap* gMap;
+constexpr uint32_t tileWidth = 64;
+constexpr uint32_t tileHeight = 64;
+
 EntityComponentManager manager;
-
 Entity& player(manager.addEntity());
 Entity& enemey(manager.addEntity());
+Entity& gMap(manager.addEntity());
 
-uint32_t map[10][10] = { {0, 0, GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, 0, 0, 0},
-                            {0, 0, GamObjectType::BrickWall, 0, 0, 0, GamObjectType::BrickWall, 0, 0, GamObjectType::WaterBlock},
-                            {0, 0, 0, 0, 0, 0, GamObjectType::BrickWall, 0, 0, GamObjectType::WaterBlock},
-                            {0, 0, 0, 0, 0, 0, GamObjectType::BrickWall, 0, 0, 0},
-                            {0, GamObjectType::GrassBlock, GamObjectType::GrassBlock, 0, 0, 0, 0, 0, GamObjectType::WaterBlock, GamObjectType::WaterBlock},
-                            {0, GamObjectType::GrassBlock, 0, 0, 0, 0, 0, 0, 0, GamObjectType::WaterBlock},
+uint32_t map[mapWidth][mapHeight] = { {0, 0, GameObjectType::BrickWall, GameObjectType::BrickWall, 0, 0, 0, 0, 0, 0},
+                            {0, 0, GameObjectType::BrickWall, 0, 0, 0, GameObjectType::BrickWall, 0, 0, GameObjectType::WaterBlock},
+                            {0, 0, 0, 0, 0, 0, GameObjectType::BrickWall, 0, 0, GameObjectType::WaterBlock},
+                            {0, 0, 0, 0, 0, 0, GameObjectType::BrickWall, 0, 0, 0},
+                            {0, GameObjectType::GrassBlock, GameObjectType::GrassBlock, 0, 0, 0, 0, 0, GameObjectType::WaterBlock, GameObjectType::WaterBlock},
+                            {0, GameObjectType::GrassBlock, 0, 0, 0, 0, 0, 0, 0, GameObjectType::WaterBlock},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {GamObjectType::BrickWall, GamObjectType::WaterBlock, 0, 0, 0, 0, 0,0, 0, 0},
-                            {GamObjectType::WaterBlock, 0, 0, GamObjectType::BrickWall, GamObjectType::BrickWall, 0, 0, 0, GamObjectType::GrassBlock, GamObjectType::GrassBlock} };
+                            {GameObjectType::BrickWall, GameObjectType::BrickWall, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {GameObjectType::BrickWall, GameObjectType::WaterBlock, 0, 0, 0, 0, 0,0, 0, 0},
+                            {GameObjectType::WaterBlock, 0, 0, GameObjectType::BrickWall, GameObjectType::BrickWall, 0, 0, 0, GameObjectType::GrassBlock, GameObjectType::GrassBlock} };
 
 class Callbacks : public SDLCallbacks
 {
@@ -36,16 +40,23 @@ public:
 
 void Callbacks::onInit(SDL_Renderer* renderer)
 {
-    gMap = new TileMap(renderer, 10, 15, 64, 64);
-    gMap->loadMap(&map[0][0]);
+    for (uint32_t i = 0; i < mapWidth; i++)
+    {
+        for (uint32_t j = 0; j < mapHeight; j++)
+        {
+            int x = j * tileWidth;
+            int y = i * tileHeight;
+            gMap.addComponent<TileComponent>(renderer, x, y, tileWidth, tileHeight, static_cast<GameObjectType>(map[i][j]));
+        }
+    }
 
-    player.addComponent<TransformationComponent>(0, 0, 64, 64, 1);
-    player.addComponent<SpriteComponent>(renderer, "../Assets/BrickWall.png");
+    player.addComponent<TransformationComponent>(0, 0, 32, 32, 1);
+    player.addComponent<SpriteComponent>(renderer, "../Assets/player.png");
     player.addComponent<InputControllerComponent>();
     player.addComponent<CollisionComponent>("Player");
 
-    enemey.addComponent<TransformationComponent>(300.0f, 30.0f, 30, 300 ,1);
-    enemey.addComponent<SpriteComponent>(renderer, "../Assets/Grass.png");
+    enemey.addComponent<TransformationComponent>(0, 64, 32, 32 ,1);
+    enemey.addComponent<SpriteComponent>(renderer, "../Assets/enemy.png");
     enemey.addComponent<CollisionComponent>("Enemy");
 }
 
@@ -61,7 +72,6 @@ void Callbacks::onViewportSizeChanged(SDL_Renderer*, int w, int h)
 
 void Callbacks::onRenderFrame(SDL_Renderer* renderer, double deltaTime)
 {
-    //gMap->render();
     manager.render();
 }
 
