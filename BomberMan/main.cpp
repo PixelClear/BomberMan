@@ -1,6 +1,5 @@
 #include "Game.h"
 #include "Components.h"
-#include "TileMap.h"
 #include "Collission.h"
 
 using namespace Engine;
@@ -47,6 +46,7 @@ void Callbacks::onInit(SDL_Renderer* renderer)
             int x = j * tileWidth;
             int y = i * tileHeight;
             gMap.addComponent<TileComponent>(renderer, x, y, tileWidth, tileHeight, static_cast<GameObjectType>(map[i][j]));
+            gMap.addComponent<CollisionComponent>("Tile");
         }
     }
 
@@ -80,10 +80,16 @@ void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
     manager.refresh();
     manager.update();
 
-    if (Collission::AABB(player.getComponent<CollisionComponent>().getAABB(),
-        enemey.getComponent<CollisionComponent>().getAABB()))
+    for (const auto& c : GameEngine::colliders_)
     {
-        player.getComponent<TransformationComponent>().velocity() * -1;
+        if (player.getComponent<CollisionComponent>().tag() != c->tag())
+        {
+            if (Collission::AABB(player.getComponent<CollisionComponent>(), *c))
+            {
+                player.getComponent<TransformationComponent>().velocity() * -1;
+            }
+        }
+      
     }
        
 }

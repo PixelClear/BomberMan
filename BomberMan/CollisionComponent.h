@@ -20,6 +20,7 @@ namespace Engine
 
         void render() override;
 
+        std::string& tag() { return tag_; }
         SDL_Rect& getAABB() { return aabb_; }
         SDL_Rect getAABB() const { return aabb_; }
 

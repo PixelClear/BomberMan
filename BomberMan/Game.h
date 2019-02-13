@@ -3,9 +3,12 @@
 #include "SDLCallbacks.h"
 #include <chrono>
 #include <string>
+#include <vector>
 
 namespace Engine
 {
+    class CollisionComponent;
+
     class GameEngine
     {
 
@@ -36,6 +39,8 @@ namespace Engine
         static SDL_Event getEvent() noexcept { return event_; }
         
         void renderMainLoop() noexcept;
+
+        static std::vector<CollisionComponent*> colliders_;
 
     private:
 

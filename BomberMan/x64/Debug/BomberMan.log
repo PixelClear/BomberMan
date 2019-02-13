@@ -1,12 +1,18 @@
-﻿  main.cpp
+﻿  CollisionComponent.cpp
+  Collission.cpp
+  Game.cpp
+  InputControllerComponent.cpp
+  SpriteComponent.cpp
+  main.cpp
 g:\personalprojects\bomberman\bomberman\entitycomponentsystem.h(88): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-  g:\personalprojects\bomberman\bomberman\main.cpp(58): note: see reference to function template instantiation 'T &Engine::Entity::addComponent<Engine::TransformationComponent,int,int,int,int,int>(int &&,int &&,int &&,int &&,int &&)' being compiled
+  g:\personalprojects\bomberman\bomberman\main.cpp(53): note: see reference to function template instantiation 'T &Engine::Entity::addComponent<Engine::TransformationComponent,int,int,int,int,int>(int &&,int &&,int &&,int &&,int &&)' being compiled
           with
           [
               T=Engine::TransformationComponent
           ]
+  Generating Code...
   BomberMan.vcxproj -> G:\PersonalProjects\BomberMan\x64\Debug\BomberMan.exe

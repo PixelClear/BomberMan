@@ -1,6 +1,8 @@
 #include "Game.h"
+#include "CollisionComponent.h"
 
 SDL_Event Engine::GameEngine::event_;
+std::vector<Engine::CollisionComponent*>Engine::GameEngine::colliders_;
 
 Engine::GameEngine::GameEngine(SDLCallbacks * cb, std::string title, uint32_t width, uint32_t height, uint32_t xpos, uint32_t ypos, bool fullscreen):
     cb_(cb), title_(title), width_(width), height_(height), fullscreen_(fullscreen)

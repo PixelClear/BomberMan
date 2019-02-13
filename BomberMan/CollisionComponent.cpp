@@ -1,6 +1,7 @@
 #include "CollisionComponent.h"
 #include "SDL.h"
 #include "Components.h"
+#include "Game.h"
 
 void Engine::CollisionComponent::init()
 {
@@ -10,6 +11,7 @@ void Engine::CollisionComponent::init()
     }
 
     transform_ = &entity_->getComponent<TransformationComponent>();
+    GameEngine::colliders_.push_back(this);
 }
 
 void Engine::CollisionComponent::update()
