@@ -61,10 +61,13 @@ void Callbacks::onInit(SDL_Renderer* renderer)
     {
         for (uint32_t j = 0; j < mapHeight; j++)
         {
-            int x = j * tileWidth;
-            int y = i * tileHeight;
-            gMap.addComponent<TileComponent>(renderer, x, y, tileWidth, tileHeight, static_cast<GameObjectType>(map[i][j]));
-            gMap.addComponent<CollisionComponent>("Tile");
+            if (map[i][j] != 0)
+            {
+                int x = j * tileWidth;
+                int y = i * tileHeight;
+                gMap.addComponent<TileComponent>(renderer, x, y, tileWidth, tileHeight, static_cast<GameObjectType>(map[i][j]));
+                gMap.addComponent<CollisionComponent>("Tile");
+            }
         }
     }
 
