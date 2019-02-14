@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "Components.h"
 #include "Collission.h"
+#include <fstream>
 
 using namespace Engine;
 
@@ -39,6 +40,23 @@ public:
 
 void Callbacks::onInit(SDL_Renderer* renderer)
 {
+    ////Load map from file
+    //char tile;
+    //std::fstream mapFile;
+    //mapFile.open("mapfile.map");
+
+    //for (uint32_t i = 0; i < mapWidth; i++)
+    //{
+    //    for (uint32_t j = 0; j < mapHeight; j++)
+    //    {
+    //        mapFile.get(tile);
+    //        map[i][j] = static_cast<GameObjectType>(tile);
+    //        mapFile.ignore(); //ignore , in file
+    //    }
+    //}
+
+    //mapFile.close();
+
     for (uint32_t i = 0; i < mapWidth; i++)
     {
         for (uint32_t j = 0; j < mapHeight; j++)
@@ -50,12 +68,12 @@ void Callbacks::onInit(SDL_Renderer* renderer)
         }
     }
 
-    player.addComponent<TransformationComponent>(0, 0, 32, 32, 1);
+    player.addComponent<TransformationComponent>(0, 0, 64, 64, 1);
     player.addComponent<SpriteComponent>(renderer, "../Assets/player.png");
     player.addComponent<InputControllerComponent>();
     player.addComponent<CollisionComponent>("Player");
 
-    enemey.addComponent<TransformationComponent>(0, 64, 32, 32 ,1);
+    enemey.addComponent<TransformationComponent>(0, 512, 64, 64 ,1);
     enemey.addComponent<SpriteComponent>(renderer, "../Assets/enemy.png");
     enemey.addComponent<CollisionComponent>("Enemy");
 }
@@ -82,6 +100,7 @@ void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
 
     for (const auto& c : GameEngine::colliders_)
     {
+        std::string str = player.getComponent<CollisionComponent>().tag();
         if (player.getComponent<CollisionComponent>().tag() != c->tag())
         {
             if (Collission::AABB(player.getComponent<CollisionComponent>(), *c))
@@ -92,6 +111,7 @@ void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)
       
     }
        
+    
 }
 
 int main(int argc, char* argv[])

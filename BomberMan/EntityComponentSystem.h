@@ -30,7 +30,7 @@ namespace Engine
     }
 
     //Constexpr may be evaluated at compile time and must be initialized
-    constexpr std::size_t maxComponents = 32;
+    constexpr std::size_t maxComponents = 256;
 
     using ComponentBitSet = std::bitset<maxComponents>;
     using ComponentArray = std::array<Component*, maxComponents>; //std::array doesnt decay to T* as in case of C
