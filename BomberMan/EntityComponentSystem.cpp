@@ -2,6 +2,19 @@
 
 void Engine::EntityComponentManager::refresh()
 {
+    for (size_t i = 0; i < maxGroups; i++)
+    {
+        auto& v(groupEntities_[i]);
+
+        v.erase(
+        std::remove_if(std::begin(v), std::end(v),
+            [i](Entity* e)
+        {
+            return !e->isActive() && e->hasGroup(i);
+        })
+        , std::end(v));
+    }
+
     entities_.erase(std::remove_if(std::begin(entities_), std::end(entities_),
         [](const std::unique_ptr<Entity>& e)
     {
@@ -12,10 +25,15 @@ void Engine::EntityComponentManager::refresh()
 
 Engine::Entity & Engine::EntityComponentManager::addEntity()
 {
-    Entity* e = new Entity();
+    Entity* e = new Entity(*this);
     std::unique_ptr<Entity> ptr{ e };
     entities_.emplace_back(std::move(ptr));
     return *e;
+}
+
+void Engine::EntityComponentManager::addToGroup(Entity * e, GroupId id)
+{
+    groupEntities_[id].emplace_back(e);
 }
 
 //template<typename T, typename... TArgs>
@@ -39,3 +57,9 @@ Engine::Entity & Engine::EntityComponentManager::addEntity()
 //    auto ptr(componentArray_[getComponentTypeId<T>()]);
 //    return *static_cast<T*>(ptr);
 //}
+
+void Engine::Entity::addGroup(GroupId group)
+{
+    groupBitSet_[group] = true;
+    manager_.addToGroup(this, group);
+}

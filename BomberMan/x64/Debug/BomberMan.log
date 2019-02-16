@@ -1,10 +1,10 @@
 ﻿  main.cpp
-g:\personalprojects\bomberman\bomberman\entitycomponentsystem.h(88): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+g:\personalprojects\bomberman\bomberman\entitycomponentsystem.h(98): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-  g:\personalprojects\bomberman\bomberman\main.cpp(74): note: see reference to function template instantiation 'T &Engine::Entity::addComponent<Engine::TransformationComponent,int,int,int,int,int>(int &&,int &&,int &&,int &&,int &&)' being compiled
+  g:\personalprojects\bomberman\bomberman\main.cpp(86): note: see reference to function template instantiation 'T &Engine::Entity::addComponent<Engine::TransformationComponent,int,int,int,int,int>(int &&,int &&,int &&,int &&,int &&)' being compiled
           with
           [
               T=Engine::TransformationComponent

@@ -11,10 +11,22 @@ constexpr uint32_t mapHeight = 10;
 constexpr uint32_t tileWidth = 64;
 constexpr uint32_t tileHeight = 64;
 
+enum groupLabels:std::size_t
+{
+  GroupMap,
+  GroupPlayers,
+  GroupEnemy,
+  GroupColliders
+};
+
 EntityComponentManager manager;
 Entity& player(manager.addEntity());
 Entity& enemey(manager.addEntity());
 Entity& gMap(manager.addEntity());
+
+std::vector<Entity*> tiles;
+std::vector<Entity*> players;
+std::vector<Entity*> enemies;
 
 uint32_t map[mapWidth][mapHeight] = { {0, 0, GameObjectType::BrickWall, GameObjectType::BrickWall, 0, 0, 0, 0, 0, 0},
                             {0, 0, GameObjectType::BrickWall, 0, 0, 0, GameObjectType::BrickWall, 0, 0, GameObjectType::WaterBlock},
@@ -66,7 +78,7 @@ void Callbacks::onInit(SDL_Renderer* renderer)
                 int x = j * tileWidth;
                 int y = i * tileHeight;
                 gMap.addComponent<TileComponent>(renderer, x, y, tileWidth, tileHeight, static_cast<GameObjectType>(map[i][j]));
-                gMap.addComponent<CollisionComponent>("Tile");
+                gMap.addGroup(GroupMap);
             }
         }
     }
@@ -75,10 +87,17 @@ void Callbacks::onInit(SDL_Renderer* renderer)
     player.addComponent<SpriteComponent>(renderer, "../Assets/player.png");
     player.addComponent<InputControllerComponent>();
     player.addComponent<CollisionComponent>("Player");
+    player.addGroup(GroupPlayers);
 
     enemey.addComponent<TransformationComponent>(0, 512, 64, 64 ,1);
     enemey.addComponent<SpriteComponent>(renderer, "../Assets/enemy.png");
     enemey.addComponent<CollisionComponent>("Enemy");
+    enemey.addGroup(GroupEnemy);
+
+
+    tiles = manager.getGroup(GroupMap);
+    players = manager.getGroup(GroupPlayers);
+    enemies = manager.getGroup(GroupEnemy);
 }
 
 void Callbacks::onKey(SDL_Renderer*, int keyCode, bool pressed)
@@ -93,7 +112,12 @@ void Callbacks::onViewportSizeChanged(SDL_Renderer*, int w, int h)
 
 void Callbacks::onRenderFrame(SDL_Renderer* renderer, double deltaTime)
 {
-    manager.render();
+    for (auto& t : tiles)
+        t->render();
+    for (auto& p : players)
+        p->render();
+    for (auto& e : enemies)
+        e->render();
 }
 
 void Callbacks::onUpdateFrame(SDL_Renderer* renderer, double elapseTime)

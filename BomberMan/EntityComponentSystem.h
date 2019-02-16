@@ -11,8 +11,11 @@ namespace Engine
 {
     class Component;
     class Entity;
+    class EntityComponentManager;
 
     using ComponentId = std::size_t;
+    using GroupId = std::size_t;
+
     //size_t is typedef to some unsigned int or unsigned long or unsinged long long
     //Depending on platform hence it is portable
 
@@ -31,17 +34,19 @@ namespace Engine
 
     //Constexpr may be evaluated at compile time and must be initialized
     constexpr std::size_t maxComponents = 256;
+    constexpr std::size_t maxGroups = 32;
 
     using ComponentBitSet = std::bitset<maxComponents>;
     using ComponentArray = std::array<Component*, maxComponents>; //std::array doesnt decay to T* as in case of C
+    using GroupBitSet = std::bitset<maxGroups>;
 
     class Component
     {
     public:
         Component()
         {
-
         }
+
         Entity* entity_; //owner of the component this just refers to parent so no smart pointer needed
 
         virtual void init() = 0;
@@ -56,10 +61,10 @@ namespace Engine
     class Entity
     {
     public:
-        Entity()
-        {
 
-        }
+        EntityComponentManager& manager_;
+        
+        Entity(EntityComponentManager& manager) : manager_(manager) {}
 
         void update()
         {
@@ -80,6 +85,11 @@ namespace Engine
         template<typename T> bool hasComponent() const
         {
             return componentBitSet_[getComponentTypeId<T>()];
+        }
+
+        bool hasGroup(GroupId group)
+        {
+            return groupBitSet_[group];
         }
 
         template<typename T, typename... TArgs>
@@ -105,11 +115,19 @@ namespace Engine
             return *static_cast<T*>(ptr);
         }
 
+        void addGroup(GroupId group);
+
+        void deleteGroup(GroupId group)
+        {
+            groupBitSet_[group] = false;
+        }
+
     private:
         bool active_ = true;
         std::vector<std::unique_ptr<Component>> components_; //List of components owned by the entity (owned hence smart pointer unique)
         ComponentArray componentArray_;
         ComponentBitSet componentBitSet_;
+        GroupBitSet groupBitSet_;
     };
 
     class EntityComponentManager
@@ -132,8 +150,16 @@ namespace Engine
 
         Entity& addEntity();
 
+        void addToGroup(Entity* e, GroupId id);
+
+        std::vector<Entity*> getGroup(GroupId group)
+        {
+            return groupEntities_[group];
+        }
+
     private:
         std::vector<std::unique_ptr<Entity>>entities_;
+        std::array<std::vector<Entity*>, maxGroups> groupEntities_;
     };
    
 }
