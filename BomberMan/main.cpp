@@ -78,10 +78,11 @@ void Callbacks::onInit(SDL_Renderer* renderer)
                 int x = j * tileWidth;
                 int y = i * tileHeight;
                 gMap.addComponent<TileComponent>(renderer, x, y, tileWidth, tileHeight, static_cast<GameObjectType>(map[i][j]));
-                gMap.addGroup(GroupMap);
             }
         }
     }
+
+    gMap.addGroup(GroupMap);
 
     player.addComponent<TransformationComponent>(0, 0, 64, 64, 1);
     player.addComponent<SpriteComponent>(renderer, "../Assets/player.png");
@@ -94,7 +95,7 @@ void Callbacks::onInit(SDL_Renderer* renderer)
     enemey.addComponent<CollisionComponent>("Enemy");
     enemey.addGroup(GroupEnemy);
 
-
+    /*Group basically gives us control in which sequence we draw our entities*/
     tiles = manager.getGroup(GroupMap);
     players = manager.getGroup(GroupPlayers);
     enemies = manager.getGroup(GroupEnemy);
