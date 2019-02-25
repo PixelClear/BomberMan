@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationComponent.cpp" />
     <ClCompile Include="CollisionComponent.cpp" />
     <ClCompile Include="Collission.cpp" />
     <ClCompile Include="EntityComponentSystem.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="Vector2D.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationComponent.h" />
     <ClInclude Include="CollisionComponent.h" />
     <ClInclude Include="Collission.h" />
     <ClInclude Include="Components.h" />
