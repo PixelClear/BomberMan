@@ -85,7 +85,7 @@ void Callbacks::onInit(SDL_Renderer* renderer)
     gMap.addGroup(GroupMap);
 
     player.addComponent<TransformationComponent>(0, 0, 64, 64, 1);
-    player.addComponent<SpriteComponent>(renderer, "../Assets/player.png");
+    player.addComponent<SpriteComponent>(renderer, "../Assets/RightLeftWalking.png", 7, 100);
     player.addComponent<InputControllerComponent>();
     player.addComponent<CollisionComponent>("Player");
     player.addGroup(GroupPlayers);

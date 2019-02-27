@@ -41,11 +41,15 @@ namespace Engine
         uint32_t getHeight() const { return height_; }
         uint32_t& getHeight() { return height_; }
 
+        bool animated() const { return isAnimated; }
+        bool& animated() { return isAnimated; }
+
     private:
         SDL_Rect src_;
         SDL_Rect dst_;
         uint32_t width_;
         uint32_t height_;
         SDL_Texture* texture_ = nullptr;
+        bool isAnimated = false;
     };
 }
